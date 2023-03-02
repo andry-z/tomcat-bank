@@ -44,7 +44,9 @@
                                 completato = true;
                                 parts[2] = String.valueOf(Double.parseDouble(parts[2]) - amount);
                             }else{
-                                response.sendRedirect("erroreSaldoInsufficiente.jsp");
+                                boolean insufficiente = true;
+                                session.setAttribute("insufficiente", insufficiente);
+                                response.sendRedirect("home.jsp");
                             }
                             
                         }

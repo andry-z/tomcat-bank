@@ -18,11 +18,12 @@
         </script>
     <title>Homepage</title>
 </head>
-<body>
+<body onload="checkRefresh()">
     <%@ page import="java.io.*,java.util.*" %>
     <%
         String username = (String) session.getAttribute("username");
         String saldo = "";
+        Boolean insufficiente = (Boolean) session.getAttribute("insufficiente");
         if (username == null) {
             response.sendRedirect("index.jsp");
         }else{
@@ -42,6 +43,21 @@
         }
         String esito = (String) session.getAttribute("esito");
     %>
+    <form name="refreshForm">
+      <input type="hidden" name="visited" value="" />
+    </form>
+    <script type="text/javascript">
+      function checkRefresh(){
+	        if(document.refreshForm.visited.value == ""){
+		        document.refreshForm.visited.value = "1"
+	        }else{
+              <% 
+                session.removeAttribute("esito");
+                session.removeAttribute("insufficiente");
+              %>
+          }
+        }
+    </script>
     <div class="container">
         <div class="navbar">
             <div class="navbar-brand">
@@ -97,6 +113,15 @@
             
             <%
                 }
+                if(insufficiente != null && insufficiente){
+            %>
+            <div class="container is-flex is-justify-content-center">
+              <div class="notification is-danger" style="max-width: 25%;"><button class="delete"></button><span class="is-size-7-mobile"><strong>Errore: </strong>Saldo insufficiente</span></div>
+            </div>
+            <%
+              insufficiente = null;
+                }
+              
             %>
             
             <h2 class="is-size-4 is-size-5-mobile has-text-centered">Saldo: <%= saldo %>&euro;</h2>
